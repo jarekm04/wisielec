@@ -1,4 +1,4 @@
-import { Quote } from "./Quote.js";
+import { Quote } from './Quote.js';
 
 class Game {
     currentStep = 0;
