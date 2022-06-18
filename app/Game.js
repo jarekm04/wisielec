@@ -1,6 +1,9 @@
 import { Quote } from "./Quote.js";
 
 class Game {
+    currentStep = 0;
+    lastStep = 7;
+
     quotes = [
         {
             text: 'Pan Tadeusz',
@@ -37,8 +40,15 @@ class Game {
 
     guess(letter, e) {
         e.target.disabled = true;
-        this.quote.guess(letter);
-        this.drawQuote();
+        if (this.quote.guess(letter)) {
+            this.drawQuote();
+        } else {
+            this.currentStep++;
+            document.getElementsByClassName('step')[this.currentStep].style.opacity = 1;
+        }
+        if (this.currentStep === this.lastStep) {
+            this.loosing();
+        }
     }
 
     drawLetters() {
@@ -54,11 +64,25 @@ class Game {
     drawQuote() {
         const content = this.quote.getContent();
         this.wordWrapper.innerHTML = content;
+        if (!content.includes('_')) {
+            this.winning();
+        }
     }
 
     start() {
+        document.getElementsByClassName('step')[this.currentStep].style.opacity = 1;
         this.drawLetters();
         this.drawQuote();
+    }
+
+    winning() {
+        this.wordWrapper.innerHTML = 'GRATULACJE WYGRYWASZ';
+        this.lettersWrapper.innerHTML = '';
+    }
+
+    loosing() {
+        this.wordWrapper.innerHTML = 'NIESTETY PRZEGRYWASZ';
+        this.lettersWrapper.innerHTML = '';
     }
 }
 
